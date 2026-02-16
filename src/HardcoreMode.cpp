@@ -16,7 +16,7 @@ public:
 
     void OnPlayerLogin(Player* player) override
     {
-        if (getHardcoreEnabledForPlayer(player))
+        if (getHardcoreEnabledForPlayer(player) && !player->GetSession()->IsBot())
         {
             if (player->isDead())
             {
@@ -31,7 +31,7 @@ public:
 
     void OnPlayerLevelChanged(Player* player, uint8 /*oldlevel*/) override
     {
-        if (getHardcoreEnabledForPlayer(player))
+        if (getHardcoreEnabledForPlayer(player) && !player->GetSession()->IsBot())
         {
             this->sendHarcoreStatus(player);
         }
@@ -39,7 +39,7 @@ public:
 
     void OnPlayerJustDied(Player* player) override
     {
-        if (getHardcoreEnabledForPlayer(player))
+        if (getHardcoreEnabledForPlayer(player) && !player->GetSession()->IsBot())
         {
             Group* group = player->GetGroup();
             if (group)
@@ -52,7 +52,7 @@ public:
 
     void OnPlayerReleasedGhost(Player* player) override
     {
-        if (getHardcoreEnabledForPlayer(player))
+        if (getHardcoreEnabledForPlayer(player) && !player->GetSession()->IsBot())
         {
             ChatHandler(player->GetSession()).PSendSysMessage("You'll be a ghost forever...");
             return;
@@ -61,7 +61,7 @@ public:
 
     void OnPlayerPVPKill(Player* /*killer*/, Player* killed) override
     {
-        if (getHardcoreEnabledForPlayer(killed))
+        if (getHardcoreEnabledForPlayer(killed) && !killed->GetSession()->IsBot())
         {
             ChatHandler(killed->GetSession()).PSendSysMessage("Some player killed you... in hardcore.");
             return;
@@ -70,7 +70,7 @@ public:
 
     void OnPlayerKilledByCreature(Creature* /*killer*/, Player* killed) override
     {
-        if (getHardcoreEnabledForPlayer(killed))
+        if (getHardcoreEnabledForPlayer(killed) && !killed->GetSession()->IsBot())
         {
             ChatHandler(killed->GetSession()).PSendSysMessage("You died during a hardcore session... Skills issues.");
             return;
@@ -79,7 +79,7 @@ public:
 
     void OnPlayerResurrect(Player* player, float /*restore_percent*/, bool /*applySickness*/) override
     { // We keep this function just to prevent some exploits for reviving
-        if (getHardcoreEnabledForPlayer(player))
+        if (getHardcoreEnabledForPlayer(player) && !player->GetSession()->IsBot())
         {
             ChatHandler(player->GetSession()).PSendSysMessage("You can't get revived. Git Gud.");
             player->KillPlayer();
@@ -90,7 +90,7 @@ public:
 
     bool OnPlayerCanUseChat(Player* player, uint32 type, uint32 language, std::string& msg) override
     {
-        if (getHardcoreEnabledForPlayer(player) && player->isDead())
+        if (getHardcoreEnabledForPlayer(player) && player->isDead() && !player->GetSession()->IsBot())
         {
             return false;
         }
@@ -99,7 +99,7 @@ public:
 
     bool OnPlayerCanUseChat(Player* player, uint32 type, uint32 language, std::string& msg, Player* receiver) override
     {
-        if (getHardcoreEnabledForPlayer(player) && player->isDead())
+        if (getHardcoreEnabledForPlayer(player) && player->isDead() && !player->GetSession()->IsBot())
         {
             return false;
         }
@@ -108,7 +108,7 @@ public:
 
     bool OnPlayerCanUseChat(Player* player, uint32 type, uint32 language, std::string& msg, Group* group) override
     {
-        if (getHardcoreEnabledForPlayer(player) && player->isDead())
+        if (getHardcoreEnabledForPlayer(player) && player->isDead() && !player->GetSession()->IsBot())
         {
             return false;
         }
@@ -117,7 +117,7 @@ public:
 
     bool OnPlayerCanUseChat(Player* player, uint32 type, uint32 language, std::string& msg, Guild* guild) override
     {
-        if (getHardcoreEnabledForPlayer(player) && player->isDead())
+        if (getHardcoreEnabledForPlayer(player) && player->isDead() && !player->GetSession()->IsBot())
         {
             return false;
         }
@@ -126,7 +126,7 @@ public:
 
     bool OnPlayerCanUseChat(Player* player, uint32 type, uint32 language, std::string& msg, Channel* channel) override
     {
-        if (getHardcoreEnabledForPlayer(player) && player->isDead())
+        if (getHardcoreEnabledForPlayer(player) && player->isDead() && !player->GetSession()->IsBot())
         {
             return false;
         }
@@ -135,7 +135,7 @@ public:
 
     bool OnPlayerCanGroupInvite(Player* player, std::string& membername) override
     {
-        if (getHardcoreEnabledForPlayer(player) && player->isDead())
+        if (getHardcoreEnabledForPlayer(player) && player->isDead() && !player->GetSession()->IsBot())
         {
             ChatHandler(player->GetSession()).PSendSysMessage("You can't invite players to a group while dead.");
             return false;
@@ -145,7 +145,7 @@ public:
 
     bool OnPlayerCanGroupAccept(Player* player, Group* group) override
     {
-        if (getHardcoreEnabledForPlayer(player) && player->isDead())
+        if (getHardcoreEnabledForPlayer(player) && player->isDead() && !player->GetSession()->IsBot())
         {
             ChatHandler(player->GetSession()).PSendSysMessage("You can't be a part of a group.");
             return false;
@@ -156,7 +156,7 @@ public:
 private:
     void sendHarcoreStatus(Player* player)
     {
-        if (player->IsGameMaster())
+        if (player->IsGameMaster() || player->GetSession()->IsBot())
         {
             return;
         }
@@ -236,7 +236,7 @@ public:
 };
 
 
-void AddSC_mod_harcore()
+void AddSC_mod_hardcore()
 {
     new HardcoreMode();
     new HardModeServerScript();

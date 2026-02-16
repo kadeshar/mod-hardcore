@@ -3,13 +3,13 @@
  */
 
 // From SC
-void AddSC_mod_harcore();
+void AddSC_mod_hardcore();
 
 // Add all
 // cf. the naming convention https://github.com/azerothcore/azerothcore-wotlk/blob/master/doc/changelog/master.md#how-to-upgrade-4
 // additionally replace all '-' in the module folder name with '_' here
 void Addmod_hardcoreScripts()
 {
-    AddSC_mod_harcore();
+    AddSC_mod_hardcore();
 }
 
