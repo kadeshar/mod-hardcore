@@ -77,15 +77,16 @@ public:
         }
     }
 
-    void OnPlayerResurrect(Player* player, float /*restore_percent*/, bool /*applySickness*/) override
+    bool OnPlayerCanResurrect(Player* player) override
     { // We keep this function just to prevent some exploits for reviving
         if (getHardcoreEnabledForPlayer(player) && !player->GetSession()->IsBot())
         {
             ChatHandler(player->GetSession()).PSendSysMessage("You can't get revived. Git Gud.");
             player->KillPlayer();
             player->GetSession()->KickPlayer("Player died during a hardcore session.");
-            return;
+            return false;
         }
+        return true;
     }
 
     bool OnPlayerCanUseChat(Player* player, uint32 type, uint32 language, std::string& msg) override
